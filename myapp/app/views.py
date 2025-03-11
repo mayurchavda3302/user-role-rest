@@ -7,9 +7,50 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
+
 # from rest_framework.permissions import IsAuthenticated
 
 
+class User_View(ViewSet):
+   queryset=User.objects.all()   
+   
+   def list(self,request):
+    serializer=UserSerializer(self.queryset,many=True)
+    return Response(serializer.data)
+   
+   def destroy(self,request,pk=None):
+      item=self.get_object(self.queryset,pk)
+      item.delete()
+      return Response("data deleted")
+
+   def create(self,request):
+    serializer=UserSerializer(data=request.data)
+    if serializer.is_valid(): 
+      serializer.save()
+      return Response("data created ")
+    return Response("Data not Inserted ")
+   
+class Role_View(ViewSet):
+      queryset=Role.objects.all()  
+
+      def list(self,request):
+           serialization=RoleSerializer(self.queryset,many=True)
+           return Response(serialization.data)
+      
+
+      def create(self,request):
+            Serializer=RoleSerializer(data=request.data)
+            if Serializer.is_valid():
+               Serializer.save()
+               return Response(Serializer.data)
+            return Response(Serializer.errors)
+
+      def destroy(self,request,pk):
+         item=self.get_object(self.queryset,pk)
+         item.delete()
+         return Response("data Deleted")
+                     
 @api_view(['POST'])
 def register_user(request):
     if request.method == "POST":
