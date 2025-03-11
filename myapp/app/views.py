@@ -8,9 +8,12 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
+from rest_framework import viewsets
 
-# from rest_framework.permissions import IsAuthenticated
 
+class User_Model_View(viewsets.ModelViewSet):
+   queryset=User.objects.all()
+   serializer_class=UserSerializer
 
 class User_View(ViewSet):
    queryset=User.objects.all()   
